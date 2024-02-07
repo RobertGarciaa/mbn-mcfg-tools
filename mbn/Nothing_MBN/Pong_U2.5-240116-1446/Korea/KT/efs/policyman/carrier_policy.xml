@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Carrier Policy with KT requirements
+     $Header: //components/rel/mmcp.mpss/11.1/policyman/configurations/Carrier/KT/subsidized/carrier_policy.xml#2 $
+-->
+<policy name            = "KT"
+        changelist      = "$Change: 33733939 $"
+        policy_ver      = "121.1.4"
+>
+
+  <initial>
+
+    <mcc_list name="home_mccs"> 450 </mcc_list>   
+
+    <define_fullrat_config>
+      <rat_capability base="current">
+        <include> 5G </include>
+      </rat_capability>
+    </define_fullrat_config>
+
+    <feature single_sim="normal"> dualmmode </feature> 
+
+  </initial>
+
+  <if>
+    <any_of>
+      <not> <phone_operating_mode> ONLINE </phone_operating_mode> </not>
+      <not> <have_location /> </not>
+    </any_of>
+    <then>
+      <stop />
+    </then>
+  </if>
+
+  <!-- Beyond this point, the device is ONLINE and has a location. -->
+  <svc_mode> FULL </svc_mode>
+  <str_set name="skip_rats_during_acq_db" type="RAT" value="W" >
+    <location_mcc_in list="home_mccs" />
+  </str_set>
+  
+  <str_set name="skip_rats_during_acq_db" type="RAT" value="G W" >
+    <location_mcc_in list="global:china_mccs" />
+  </str_set>
+  
+  <str_set name="skip_rats_during_acq_db" type="RAT" value="" >
+    <all_of>
+      <not> <location_mcc_in list="home_mccs" /> </not>
+      <not> <location_mcc_in list="global:china_mccs" /> </not>
+    </all_of>  
+  </str_set>
+
+
+  <if>
+    <location_mcc_in list="home_mccs" />
+    <then>
+      <rat_capability base="current" >
+        <include> 5G </include>
+        <exclude> G </exclude>
+      </rat_capability>
+    </then>
+    <else>
+      <rat_capability base="current" >
+        <exclude> 5G </exclude>
+      </rat_capability>
+      <disable_reason which="SA" set="ROAMING" />
+      <disable_reason which="NSA" set="ROAMING" />
+    </else>
+  </if>
+
+</policy>

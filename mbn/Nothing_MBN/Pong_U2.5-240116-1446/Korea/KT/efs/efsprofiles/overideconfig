@@ -1,0 +1,58 @@
+
+[SILENTREDIAL_OVERRIDE]
+0^1 = SIP_ERROR_403
+0^1 = SIP_ERROR_404
+0^1 = SIP_ERROR_480
+0^1 = SIP_ERROR_580
+0^1 = SIP_ERROR_600
+0^1 = SIP_ERROR_604
+0^1 = SIP_ERROR_606
+[SILENTREDIAL_OVERRIDE_END]
+
+[SMSDAN:SMSSettings]
+
+#For the In-Reply-To header isn't matched with the original call_id, UE will send 488 response if 0 or send 200 response if 1.
+
+*IgnoreInReplyToHeaderError = 1
+
+[QIPCALL:ImsVideoConfig]
+
+#ABR-14025/14395: Switch off data and VT can keep
+
+*vtImpactedByDataSetting = 0
+
+[QIPCALL:ImsVoiceConfig]
+
+#This config is required to enable 380 response validation as per
+#3GPP.
+
+*enableAlternateSrvRspCheck = 0
+
+#ABR13T-1739: Enable Domain selection in IMS
+
+*enableDomainSelection = 1
+
+[Ut:UtConfiguration]
+
+#Fix CF over UT fail issue by default 
+
+*BlockIfNoBSCode = 0
+
+*BlockRequestIfNullRule = 0
+
+[QIPCALL:ImsVoiceSuppsConfig]
+
+#Fix fails to receive 3rd incoming call waiting issue
+
+*presentThirdCalltoUser = 1
+
+[QIPCALL:ImsVoWifiConfig]
+
+#Nothing: Enable DPD detect for abnormal wifi-hospot operation
+
+*wifiConnectivityBackoffTimer = 1
+
+*MidCallConnectivityTimer = 5
+
+*EnableOnDemandDPDCheckOnWiFiMidCallInactivityTimeOut = 1
+

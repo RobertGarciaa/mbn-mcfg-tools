@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Carrier Policy with SKT requirements
+     $Header: //components/rel/mmcp.mpss/11.1/policyman/configurations/Carrier/SKT/subsidized/carrier_policy.xml#1 $
+-->
+<policy name            = "SKT"
+        changelist      = "$Change: 32656314 $"
+        policy_ver      = "123.1.2"
+>
+
+  <initial>
+
+    <mcc_list name="home_mccs"> 450 </mcc_list>
+
+    <define_fullrat_config>
+      <rat_capability base="current">
+        <include> 5G </include>
+      </rat_capability>
+    </define_fullrat_config>
+
+    <feature single_sim="normal"> dualmmode </feature>
+
+  </initial>
+
+  <if>
+    <any_of>
+      <not> <phone_operating_mode> ONLINE </phone_operating_mode> </not>
+      <not> <have_location /> </not>
+    </any_of>
+    <then>
+      <stop />
+    </then>
+  </if>
+
+  <!-- Beyond this point, the device is ONLINE and has a location. -->
+  <svc_mode> FULL </svc_mode>
+
+  <if>
+    <location_mcc_in list="home_mccs" />
+    <then>
+      <rat_capability base="current" >
+        <include> 5G </include>
+        <exclude> G </exclude>
+      </rat_capability>
+    </then>
+    <else>
+      <rat_capability base="current" >
+        <exclude> 5G </exclude>
+      </rat_capability>
+      <disable_reason which="SA" set="ROAMING" />
+      <disable_reason which="NSA" set="ROAMING" />
+    </else>
+  </if>
+
+</policy>
