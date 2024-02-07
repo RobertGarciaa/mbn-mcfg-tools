@@ -44,6 +44,11 @@ Our package provides a CLI tool to pack/unpack MBN files.
 > and the files in the `files` directory are packed into an MBN file when using our tool to repack a
 > file.
 
+To use mbn tool:
+```
+source <venvname>/bin/activate
+'''
+
 To extract the file `row_common.mbn` into the directory `row_common_extracted`:
 ```shell
 mbn-tool -e row_common.mbn row_common_extracted
